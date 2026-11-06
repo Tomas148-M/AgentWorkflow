@@ -1,6 +1,6 @@
 [build-system]
-requires = ["setuptools>=68"]
-build-backend = "setuptools.build_meta"
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
 
 [project]
 name = "agent-workflow"
@@ -9,8 +9,12 @@ description = "A small, extensible Python tool-using agent"
 requires-python = ">=3.10"
 dependencies = []
 
+[project.optional-dependencies]
+ai-coder = ["langgraph>=1.0,<2", "langgraph-checkpoint-sqlite>=3.0,<4"]
+
 [project.scripts]
 agent-workflow = "agent_workflow.__main__:main"
+ai-coder = "agent_workflow.AI_coder.cli:main"
 
-[tool.setuptools.packages.find]
-include = ["agent_workflow*"]
+[tool.poetry]
+packages = [{ include = "agent_workflow" }]

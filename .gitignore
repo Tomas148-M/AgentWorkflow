@@ -5,3 +5,5 @@ __pycache__/
 *.egg-info/
 build/
 dist/
+.ai-coder/
+.tmp-ai-coder-deps/
