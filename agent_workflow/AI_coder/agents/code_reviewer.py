@@ -5,7 +5,6 @@ from ..nodes import execute_role
 
 ROLE = Role(
     name='reviewer',
-    report='code_review_notes.md',
     instructions="""
 Read task, analysis and implementation report, then inspect actual source and
 unit-test changes. Review correctness, safety, regressions and maintainability.
@@ -16,6 +15,6 @@ Do not edit files. Return needs_changes for actionable implementation defects.
 )
 
 
-def code_reviewer_node(state, runner, root, output):
-    """Run this role in its own model conversation and save its report."""
-    return execute_role(ROLE, state, runner, root, output)
+def code_reviewer_node(state, runner, root):
+    """Run this role in its own model conversation and return its result through graph state."""
+    return execute_role(ROLE, state, runner, root)

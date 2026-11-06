@@ -5,7 +5,6 @@ from ..nodes import execute_role
 
 ROLE = Role(
     name='tester',
-    report='test_report_notes.md',
     instructions="""
 Independently verify acceptance criteria using the project's Python unit tests.
 Inspect actual source and tests and run every configured unit-test command with
@@ -17,6 +16,6 @@ criteria. Zero collected tests is blocked, never a passing test run.
 )
 
 
-def tester_node(state, runner, root, output):
-    """Run this role in its own model conversation and save its report."""
-    return execute_role(ROLE, state, runner, root, output)
+def tester_node(state, runner, root):
+    """Run this role in its own model conversation and return its result through graph state."""
+    return execute_role(ROLE, state, runner, root)

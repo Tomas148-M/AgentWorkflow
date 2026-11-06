@@ -5,7 +5,6 @@ from ..nodes import execute_role
 
 ROLE = Role(
     name='developer',
-    report='developer_solution.md',
     instructions="""
 Implement the task and meaningful Python unit tests. Inspect existing source,
 tests, repository guidance and pyproject.toml first. Follow supported Python
@@ -21,6 +20,6 @@ not run. Only this role can write source and tests; final approval is human.
 )
 
 
-def developer_node(state, runner, root, output):
-    """Run this role in its own model conversation and save its report."""
-    return execute_role(ROLE, state, runner, root, output)
+def developer_node(state, runner, root):
+    """Run this role in its own model conversation and return its result through graph state."""
+    return execute_role(ROLE, state, runner, root)

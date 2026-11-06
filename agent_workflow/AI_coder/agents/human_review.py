@@ -1,19 +1,17 @@
 """Required human decision, validation and audit record."""
-import json
-
 from langgraph.types import interrupt
 
 from ..runtime import fingerprint
 
 
-def human_review_node(state, root, output):
+def human_review_node(state, root):
     """Pause for a human decision and record only a valid explicit response."""
     # No side effects before interrupt: this node restarts on resume.
     payload = {
         "run_id": state["run_id"],
         "iteration": state["iteration"],
         "status": state["status"],
-        "review_package": str(output / "review_package.json"),
+        "review_package": state["review_package"],
         "decisions": ["approve", "request_changes", "reject"],
         "requires_limitations_acknowledgment": state["status"] != "checks_passed",
     }
@@ -39,7 +37,9 @@ def human_review_node(state, root, output):
     else:
         status = "repair_requested" if state["iteration"] < 3 else "changes_required_new_run"
     record = {"run_id": state["run_id"], "iteration": state["iteration"], **answer, "status": status}
-    text = "# Human review\n\n```json\n" + json.dumps(record, indent=2) + "\n```\n"
-    (output / "human_review.md").write_text(text, encoding="utf-8")
-    (output / f"iteration-{state['iteration']}-human_review.md").write_text(text, encoding="utf-8")
-    return {"status": status, "human_feedback": answer.get("feedback", "")}
+    return {
+        "status": status,
+        "human_feedback": answer.get("feedback", ""),
+        "human_review": record,
+        "human_reviews": [*state.get("human_reviews", []), record],
+    }
